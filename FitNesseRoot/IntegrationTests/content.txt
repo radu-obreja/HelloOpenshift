@@ -1,0 +1,8 @@
+This page tells you how to use the Cucumber Test System for FitNesse.
+
+!define TEST_SYSTEM {cucumber}
+
+!define cucumber.glue {com.mood.cucumber}
+
+!contents
+

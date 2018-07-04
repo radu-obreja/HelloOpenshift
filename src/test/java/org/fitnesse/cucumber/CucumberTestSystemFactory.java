@@ -1,0 +1,42 @@
+package org.fitnesse.cucumber;
+
+import static java.lang.String.format;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.List;
+
+import fitnesse.testsystems.ClassPath;
+import fitnesse.testsystems.Descriptor;
+import fitnesse.testsystems.TestSystem;
+import fitnesse.testsystems.TestSystemFactory;
+
+public class CucumberTestSystemFactory implements TestSystemFactory {
+
+    @Override
+    public TestSystem create(Descriptor descriptor) {
+        URLClassLoader classLoader = new URLClassLoader(getUrlsFromClassPath(descriptor), getClass().getClassLoader());
+        return new CucumberTestSystem(descriptor.getTestSystem(), descriptor.getExecutionLogListener(), classLoader);
+    }
+
+    private URL[] getUrlsFromClassPath(Descriptor descriptor) {
+        ClassPath classPath = descriptor.getClassPath();
+        List<String> pathElements = classPath.getElements();
+        URL[] urls = new URL[pathElements.size()];
+        int i = 0;
+        for (String path : pathElements) {
+            urls[i++] = getUrl(path);
+        }
+        return urls;
+    }
+
+    private URL getUrl(final String path) {
+        try {
+            return new File(path).toURI().toURL();
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException(format("path '%s' can not be converted to a valid URL", path), e);
+        }
+    }
+}

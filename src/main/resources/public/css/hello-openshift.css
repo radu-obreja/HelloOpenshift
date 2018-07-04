@@ -1,0 +1,35 @@
+body {
+	margin:0;
+	border:0;
+	padding:0;
+	color: white;
+	background-color: black;
+    background-image: url(../img/background.jpg);
+    background-repeat: no-repeat;
+    background-position: left top;
+}
+
+.top-bar {
+	width: 100%;
+}
+
+.top-bar md-toolbar {
+	background-color:transparent;
+}
+
+.top-bar md-toolbar .md-button.md-icon-button .favorite-icon {
+	fill: #DE3641; 
+}
+
+.top-bar md-toolbar md-toolbar-filler {
+	background-color: #e0e0e0; 
+}
+.top-bar md-toolbar md-toolbar-filler #filler-icon {
+	fill: #4C9EF1; 
+}
+	
+.login-box {
+	max-width: 90%;
+	width: 500px;
+	background: rgba(255, 255, 255, 0.2);
+}
