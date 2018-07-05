@@ -1,11 +1,9 @@
 pipeline {
-  agent {
-      label 'maven'
-  }
+  agent any
   stages {
     stage('Build Application') {
       steps {
-		sh "mvn install -P openshift"
+		sh "mvn -e clean install -P openshift-sonar"
       }
     }
     stage('Create Image Builder') {
