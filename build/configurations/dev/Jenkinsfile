@@ -12,14 +12,14 @@ pipeline {
       when {
         expression {
           openshift.withCluster() {
-            return !openshift.selector("bc", "hello-openshift-dev").exists();
+            return !openshift.selector("bc", "hello-openshift-image-dev").exists();
           }
         }
       }
       steps {
         script {
           openshift.withCluster() {
-            openshift.newBuild("--name=hello-openshift-dev", "--image-stream=redhat-openjdk18-openshift:1.4", "--binary")
+            openshift.newBuild("--name=hello-openshift-image-dev", "--image-stream=redhat-openjdk18-openshift:1.4", "--binary")
           }
         }
       }
@@ -28,10 +28,10 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.selector("bc", "hello-openshift-dev").startBuild("--from-file=target/hello-openshift-0.0.1-SNAPSHOT.jar", "--wait")
+            openshift.selector("bc", "hello-openshift-image-dev").startBuild("--from-file=target/hello-openshift-0.0.1-SNAPSHOT.jar", "--wait")
           }
           openshift.withCluster() {
-            openshift.tag("hello-openshift-dev:latest")
+            openshift.tag("hello-openshift-image-dev:latest")
           }
         }
       }
