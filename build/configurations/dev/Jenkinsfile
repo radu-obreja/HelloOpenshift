@@ -31,7 +31,7 @@ pipeline {
             openshift.selector("bc", "hello-openshift-image-dev").startBuild("--from-file=target/hello-openshift-0.0.1-SNAPSHOT.jar", "--wait")
           }
           openshift.withCluster() {
-            openshift.tag("hello-openshift-image-dev:latest")
+            openshift.tag("hello-openshift-image-dev:latest", "hello-openshift-image-dev:dev")
           }
         }
       }
@@ -47,7 +47,7 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.newApp("hello-openshift-dev:latest", "--name=hello-openshift-dev").narrow('svc').expose()
+            openshift.newApp("hello-openshift-image-dev:latest", "--name=hello-openshift-dev").narrow('svc').expose()
           }
         }
       }
