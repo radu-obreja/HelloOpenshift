@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Build Application') {
       steps {
-		sh "mvn -e clean install -P openshift-sonar"
+		sh "mvn clean install -e -P openshift-sonar"
       }
     }
     stage('Create Image Builder') {

@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Build Application') {
       steps {
-		sh "mvn -e clean package -P openshift"
+		sh "mvn clean package -e -P openshift"
       }
     }
     stage('Create Image Builder') {
