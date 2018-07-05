@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: List
+metadata: {}
+items:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      pipeline.alpha.openshift.io/uses: '[{"name": "hello-openshift-dev", "namespace": "", "kind": "DeploymentConfig"}]'
+    name: hello-openshift-dev
+  spec:
+    source:
+      git:
+        ref: pipeline
+        uri: https://github.com/radu-obreja/HelloOpenshift.git
+      type: Git
+    strategy:
+      type: JenkinsPipeline
+      jenkinsPipelineStrategy:
+        jenkinsfilePath: build/configurations/dev/Jenkinsfile
+    envFrom:
+    - configMapRef:
+      name: hello-openshift-dev-config
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: hello-openshift-dev-config
+  data:
+    hello-openshift.datasource.host: mysql.mood.svc
+    hello-openshift.datasource.database: hello-openshift
+    hello-openshift.datasource.username : root
+    hello-openshift.datasource.password : k4hvd
+    hello-openshift-apps.datasource.host: mysql.mood.svc
+    hello-openshift-apps.datasource.database: hello-openshift-apps
+    hello-openshift-apps.datasource.username : root
+    hello-openshift-apps.datasource.password : k4hvd
