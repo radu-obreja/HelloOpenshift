@@ -26,11 +26,11 @@ items:
   metadata:
     name: hello-openshift-dev-config
   data:
-    hello-openshift.datasource.host: mysql.mood.svc
-    hello-openshift.datasource.database: hello-openshift
-    hello-openshift.datasource.username : root
-    hello-openshift.datasource.password : k4hvd
-    hello-openshift-apps.datasource.host: mysql.mood.svc
-    hello-openshift-apps.datasource.database: hello-openshift-apps
-    hello-openshift-apps.datasource.username : root
-    hello-openshift-apps.datasource.password : k4hvd
+    hello_openshift_datasource_host: mysql.mood.svc
+    hello_openshift_datasource_database: hello-openshift
+    hello_openshift_datasource_username : root
+    hello_openshift_datasource_password : k4hvd
+    hello_openshift_apps_datasource_host: mysql.mood.svc
+    hello_openshift_apps_datasource_database: hello-openshift-apps
+    hello_openshift_apps_datasource_username : root
+    hello_openshift_apps_datasource_password : k4hvd
