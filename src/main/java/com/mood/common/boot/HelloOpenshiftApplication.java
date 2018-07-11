@@ -12,18 +12,20 @@ import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 @Configuration
-@ComponentScan(basePackages = {"com.mood"})
+@ComponentScan(basePackages = { "com.mood" })
 public class HelloOpenshiftApplication {
 
 	public static void main(String[] args) {
-	     SpringApplication sa = new SpringApplication();
-	     sa.addListeners(new ApplicationListener<ApplicationEvent>() {
-	    	 @Override
-	    	 public void onApplicationEvent(ApplicationEvent event) {
-	    		 System.out.println("event: " + event);
-	    	 }
-	     });
-	     sa.addPrimarySources(new HashSet<>(Arrays.asList(HelloOpenshiftApplication.class)));
-	     sa.run(args);
+		System.out.println(System.getenv());
+
+		SpringApplication sa = new SpringApplication();
+		sa.addListeners(new ApplicationListener<ApplicationEvent>() {
+			@Override
+			public void onApplicationEvent(ApplicationEvent event) {
+				System.out.println("event: " + event);
+			}
+		});
+		sa.addPrimarySources(new HashSet<>(Arrays.asList(HelloOpenshiftApplication.class)));
+		sa.run(args);
 	}
 }
