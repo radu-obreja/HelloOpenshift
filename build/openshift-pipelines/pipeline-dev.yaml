@@ -15,7 +15,7 @@ items:
     strategy:
       type: JenkinsPipeline
       jenkinsPipelineStrategy:
-        jenkinsfilePath: build/configurations/dev/Jenkinsfile-UI
+        jenkinsfilePath: build/configurations/Jenkinsfile-UI
 - apiVersion: v1
   kind: BuildConfig
   metadata:
@@ -29,7 +29,7 @@ items:
     strategy:
       type: JenkinsPipeline
       jenkinsPipelineStrategy:
-        jenkinsfilePath: build/configurations/dev/Jenkinsfile-Artist
+        jenkinsfilePath: build/configurations/Jenkinsfile-Artist
 - apiVersion: v1
   kind: BuildConfig
   metadata:
@@ -43,7 +43,7 @@ items:
     strategy:
       type: JenkinsPipeline
       jenkinsPipelineStrategy:
-        jenkinsfilePath: build/configurations/dev/Jenkinsfile-Movie
+        jenkinsfilePath: build/configurations/Jenkinsfile-Movie
 - apiVersion: v1
   kind: ConfigMap
   metadata:
@@ -66,6 +66,9 @@ items:
     to:
       kind: Service
       name: hello-openshift
+    port:
+      targetPort: 8080-tcp
+    wildcardPolicy: None
 - apiVersion: v1
   kind: Route
   metadata:
@@ -76,6 +79,9 @@ items:
     to:
       kind: Service
       name: hello-openshift-artist
+    port:
+      targetPort: 8080-tcp
+    wildcardPolicy: None
 - apiVersion: v1
   kind: Route
   metadata:
@@ -86,3 +92,6 @@ items:
     to:
       kind: Service
       name: hello-openshift-movie
+    port:
+      targetPort: 8080-tcp
+    wildcardPolicy: None

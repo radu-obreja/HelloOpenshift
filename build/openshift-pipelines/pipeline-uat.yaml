@@ -5,9 +5,7 @@ items:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    annotations:
-      pipeline.alpha.openshift.io/uses: '[{"name": "hello-openshift-uat", "namespace": "", "kind": "DeploymentConfig"}]'
-    name: hello-openshift-uat
+    name: hello-openshift
   spec:
     source:
       git:
@@ -17,20 +15,83 @@ items:
     strategy:
       type: JenkinsPipeline
       jenkinsPipelineStrategy:
-        jenkinsfilePath: build/configurations/uat/Jenkinsfile
-    envFrom:
-    - configMapRef:
-      name: hello-openshift-uat-config
+        jenkinsfilePath: build/configurations/Jenkinsfile-UI
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: hello-openshift-artist
+  spec:
+    source:
+      git:
+        ref: master
+        uri: https://github.com/radu-obreja/HelloOpenshift.git
+      type: Git
+    strategy:
+      type: JenkinsPipeline
+      jenkinsPipelineStrategy:
+        jenkinsfilePath: build/configurations/Jenkinsfile-Artist
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: hello-openshift-movie
+  spec:
+    source:
+      git:
+        ref: master
+        uri: https://github.com/radu-obreja/HelloOpenshift.git
+      type: Git
+    strategy:
+      type: JenkinsPipeline
+      jenkinsPipelineStrategy:
+        jenkinsfilePath: build/configurations/Jenkinsfile-Movie
 - apiVersion: v1
   kind: ConfigMap
   metadata:
-    name: hello-openshift-uat-config
+    name: hello-openshift-config
   data:
-    hello-openshift.datasource.host: mysql.mood.svc
-    hello-openshift.datasource.database: hello-openshift
-    hello-openshift.datasource.username : root
-    hello-openshift.datasource.password : k4hvd
-    hello-openshift-apps.datasource.host: mysql.mood.svc
-    hello-openshift-apps.datasource.database: hello-openshift-apps
-    hello-openshift-apps.datasource.username : root
-    hello-openshift-apps.datasource.password : k4hvd
+    hello_openshift_datasource_uri: mysql://mysql.mood.svc:3306
+    hello_openshift_datasource_database: hello-openshift
+    hello_openshift_datasource_username : root
+    hello_openshift_datasource_password : k4hvd
+    hello_openshift_apps_datasource_uri: mysql://mysql.mood.svc:3306
+    hello_openshift_apps_datasource_database: hello-openshift-apps
+    hello_openshift_apps_datasource_username : root
+    hello_openshift_apps_datasource_password : k4hvd
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: hello-openshift
+  spec:
+    host: hello-openshift-uat.kube.moodnet.eu
+    to:
+      kind: Service
+      name: hello-openshift
+    port:
+      targetPort: 8080-tcp
+    wildcardPolicy: None
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: hello-openshift-artist
+  spec:
+    host: hello-openshift-uat.kube.moodnet.eu
+    path: "/api/artist"
+    to:
+      kind: Service
+      name: hello-openshift-artist
+    port:
+      targetPort: 8080-tcp
+    wildcardPolicy: None
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: hello-openshift-movie
+  spec:
+    host: hello-openshift-uat.kube.moodnet.eu
+    path: "/api/movie"
+    to:
+      kind: Service
+      name: hello-openshift-movie
+    port:
+      targetPort: 8080-tcp
+    wildcardPolicy: None
