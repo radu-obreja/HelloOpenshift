@@ -5,7 +5,7 @@ items:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    name: hello-openshift-dev
+    name: hello-openshift-artist
   spec:
     source:
       git:
@@ -15,14 +15,39 @@ items:
     strategy:
       type: JenkinsPipeline
       jenkinsPipelineStrategy:
-        jenkinsfilePath: build/configurations/dev/Jenkinsfile
-    envFrom:
-    - configMapRef:
-      name: hello-openshift-dev-config
+        jenkinsfilePath: build/configurations/dev/Jenkinsfile-Artist
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: hello-openshift-movie
+  spec:
+    source:
+      git:
+        ref: master
+        uri: https://github.com/radu-obreja/HelloOpenshift.git
+      type: Git
+    strategy:
+      type: JenkinsPipeline
+      jenkinsPipelineStrategy:
+        jenkinsfilePath: build/configurations/dev/Jenkinsfile-Movie
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: hello-openshift-ui
+  spec:
+    source:
+      git:
+        ref: master
+        uri: https://github.com/radu-obreja/HelloOpenshift.git
+      type: Git
+    strategy:
+      type: JenkinsPipeline
+      jenkinsPipelineStrategy:
+        jenkinsfilePath: build/configurations/dev/Jenkinsfile-UI
 - apiVersion: v1
   kind: ConfigMap
   metadata:
-    name: hello-openshift-dev-config
+    name: hello-openshift-config
   data:
     hello_openshift_datasource_uri: mysql://mysql.mood.svc:3306
     hello_openshift_datasource_database: hello-openshift
@@ -32,112 +57,3 @@ items:
     hello_openshift_apps_datasource_database: hello-openshift-apps
     hello_openshift_apps_datasource_username : root
     hello_openshift_apps_datasource_password : k4hvd
-- apiVersion: v1
-  kind: DeploymentConfig
-  metadata:
-    labels:
-      app: hello-openshift-dev
-    name: hello-openshift-dev
-  spec:
-    replicas: 1
-    selector:
-      app: hello-openshift-dev
-      deploymentconfig: hello-openshift-dev
-    strategy:
-      rollingParams:
-        intervalSeconds: 1
-        maxSurge: 25%
-        maxUnavailable: 25%
-        timeoutSeconds: 600
-        updatePeriodSeconds: 1
-      type: Rolling
-    template:
-      metadata:
-        labels:
-          app: hello-openshift-dev
-          deploymentconfig: hello-openshift-dev
-      spec:
-        containers:
-          - envFrom:
-              - configMapRef:
-                  name: hello-openshift-dev-config
-            image: 'hello-openshift-image-dev:latest'
-            imagePullPolicy: Always
-            livenessProbe:
-              failureThreshold: 3
-              httpGet:
-                path: /
-                port: 8080
-                scheme: HTTP
-              initialDelaySeconds: 10
-              periodSeconds: 10
-              successThreshold: 1
-              timeoutSeconds: 2
-            name: hello-openshift-dev
-            ports:
-              - containerPort: 8080
-                protocol: TCP
-            readinessProbe:
-              failureThreshold: 3
-              httpGet:
-                path: /
-                port: 8080
-                scheme: HTTP
-              initialDelaySeconds: 30
-              periodSeconds: 10
-              successThreshold: 1
-              timeoutSeconds: 2
-            resources: {}
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: File
-        dnsPolicy: ClusterFirst
-        restartPolicy: Always
-        securityContext: {}
-        terminationGracePeriodSeconds: 30
-    test: false
-    triggers:
-    - type: ConfigChange
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-        - hello-openshift-dev
-        from:
-          kind: ImageStreamTag
-          name: hello-openshift-image-dev:latest
-      type: ImageChange
-  status: {}
-- apiVersion: v1
-  kind: Service
-  metadata:
-    annotations:
-      openshift.io/generated-by: OpenShiftNewApp
-    labels:
-      app: hello-openshift-dev
-    name: hello-openshift-dev
-  spec:
-    ports:
-    - name: 8080-tcp
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
-    selector:
-      app: hello-openshift-dev
-      deploymentconfig: hello-openshift-dev
-    sessionAffinity: None
-    type: ClusterIP
-  status:
-    loadBalancer: {}
-- apiVersion: v1
-  kind: Route
-  metadata:
-    name: hello-openshift-dev
-    labels:
-      app: hello-openshift-dev
-  spec:
-    to:
-      kind: Service
-      name: hello-openshift-dev
-      weight: 100
-    port:
-      targetPort: 8080-tcp
-    wildcardPolicy: None

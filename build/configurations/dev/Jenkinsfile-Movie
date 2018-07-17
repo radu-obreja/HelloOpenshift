@@ -1,0 +1,57 @@
+pipeline {
+  agent {
+	label 'maven'
+  }
+  stages {
+    stage('Build Movie') {
+      steps {
+		sh "mvn clean package -e -P openshift-movie"
+      }
+    }
+    stage('Create Image Builder') {
+      when {
+        expression {
+          openshift.withCluster() {
+            return !openshift.selector("bc", "hello-openshift-image-movie").exists();
+          }
+        }
+      }
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.newBuild("--name=hello-openshift-image-movie", "--image-stream=redhat-openjdk18-openshift:1.4", "--binary")
+          }
+        }
+      }
+    }
+    stage('Build Image') {
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.selector("bc", "hello-openshift-image-movie").startBuild("--from-file=target/hello-openshift-0.0.1-SNAPSHOT.jar", "--wait")
+          }
+          openshift.withCluster() {
+            openshift.tag("hello-openshift-image-movie:latest", "hello-openshift-image-movie:dev")
+          }
+        }
+      }
+    }
+    stage('Deploy Image') {
+      when {
+        expression {
+          openshift.withCluster() {
+            return !openshift.selector('dc', 'hello-openshift-movie').exists()
+          }
+        }
+      }
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.newApp("hello-openshift-movie:latest", "--name=hello-openshift-movie").narrow('svc').expose()
+			openshift.selector('dc', 'hello-openshift-movie').env("--from=configmap/hello-openshift-config")
+          }
+        }
+      }
+    }	
+  }
+}
