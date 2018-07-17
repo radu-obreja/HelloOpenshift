@@ -5,6 +5,20 @@ items:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
+    name: hello-openshift
+  spec:
+    source:
+      git:
+        ref: master
+        uri: https://github.com/radu-obreja/HelloOpenshift.git
+      type: Git
+    strategy:
+      type: JenkinsPipeline
+      jenkinsPipelineStrategy:
+        jenkinsfilePath: build/configurations/dev/Jenkinsfile-UI
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
     name: hello-openshift-artist
   spec:
     source:
@@ -31,20 +45,6 @@ items:
       jenkinsPipelineStrategy:
         jenkinsfilePath: build/configurations/dev/Jenkinsfile-Movie
 - apiVersion: v1
-  kind: BuildConfig
-  metadata:
-    name: hello-openshift-ui
-  spec:
-    source:
-      git:
-        ref: master
-        uri: https://github.com/radu-obreja/HelloOpenshift.git
-      type: Git
-    strategy:
-      type: JenkinsPipeline
-      jenkinsPipelineStrategy:
-        jenkinsfilePath: build/configurations/dev/Jenkinsfile-UI
-- apiVersion: v1
   kind: ConfigMap
   metadata:
     name: hello-openshift-config
@@ -57,3 +57,32 @@ items:
     hello_openshift_apps_datasource_database: hello-openshift-apps
     hello_openshift_apps_datasource_username : root
     hello_openshift_apps_datasource_password : k4hvd
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: hello-openshift
+  spec:
+    host: hello-openshift-dev.kube.moodnet.eu
+    to:
+      kind: Service
+      name: hello-openshift
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: hello-openshift-artist
+  spec:
+    host: hello-openshift-dev.kube.moodnet.eu
+    path: "/api/artist"
+    to:
+      kind: Service
+      name: hello-openshift-artist
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: hello-openshift-movie
+  spec:
+    host: hello-openshift-dev.kube.moodnet.eu
+    path: "/api/movie"
+    to:
+      kind: Service
+      name: hello-openshift-movie
