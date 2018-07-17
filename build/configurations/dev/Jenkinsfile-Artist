@@ -48,7 +48,6 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.newApp("hello-openshift-artist:latest", "--name=hello-openshift-artist").narrow('svc').expose()
-			openshift.selector('dc', 'hello-openshift-artist').env("--from=configmap/hello-openshift-config")
           }
         }
       }

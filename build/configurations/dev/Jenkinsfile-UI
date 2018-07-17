@@ -48,7 +48,6 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.newApp("hello-openshift-ui:latest", "--name=hello-openshift-ui").narrow('svc').expose()
-			openshift.selector('dc', 'hello-openshift-ui').env("--from=configmap/hello-openshift-config")
           }
         }
       }
