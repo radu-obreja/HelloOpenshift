@@ -45,6 +45,20 @@ items:
       jenkinsPipelineStrategy:
         jenkinsfilePath: build/configurations/Jenkinsfile-Movie
 - apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: hello-openshift-sonar
+  spec:
+    source:
+      git:
+        ref: master
+        uri: https://github.com/radu-obreja/HelloOpenshift.git
+      type: Git
+    strategy:
+      type: JenkinsPipeline
+      jenkinsPipelineStrategy:
+        jenkinsfilePath: build/configurations/Jenkinsfile-Sonar
+- apiVersion: v1
   kind: ConfigMap
   metadata:
     name: hello-openshift-config
