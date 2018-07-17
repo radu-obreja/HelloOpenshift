@@ -3,11 +3,51 @@ pipeline {
 	label 'maven'
   }
   stages {
-    stage('Config Image') {
+    stage('Build Artist') {
+      steps {
+		sh "mvn clean package -e -P openshift-artist"
+      }
+    }
+    stage('Create Image Builder') {
+      when {
+        expression {
+          openshift.withCluster() {
+            return !openshift.selector("bc", "hello-openshift-image-artist").exists();
+          }
+        }
+      }
       steps {
         script {
           openshift.withCluster() {
-			openshift.selector('dc', 'hello-openshift-artist').env("--from=configmap/hello-openshift-config")
+            openshift.newBuild("--name=hello-openshift-image-artist", "--image-stream=redhat-openjdk18-openshift:1.4", "--binary")
+          }
+        }
+      }
+    }
+    stage('Build Image') {
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.selector("bc", "hello-openshift-image-artist").startBuild("--from-file=target/hello-openshift-0.0.1-SNAPSHOT.jar", "--wait")
+          }
+          openshift.withCluster() {
+            openshift.tag("hello-openshift-image-artist:latest", "hello-openshift-image-artist:dev")
+          }
+        }
+      }
+    }
+    stage('Deploy Image') {
+      when {
+        expression {
+          openshift.withCluster() {
+            return !openshift.selector('dc', 'hello-openshift-artist').exists()
+          }
+        }
+      }
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.newApp("hello-openshift-image-artist:latest", "--name=hello-openshift-artist")
           }
         }
       }

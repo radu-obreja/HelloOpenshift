@@ -40,14 +40,14 @@ pipeline {
       when {
         expression {
           openshift.withCluster() {
-            return !openshift.selector('dc', 'hello-openshift-ui').exists()
+            return !openshift.selector('dc', 'hello-openshift').exists()
           }
         }
       }
       steps {
         script {
           openshift.withCluster() {
-            openshift.newApp("hello-openshift-image-ui:latest", "--name=hello-openshift-ui").narrow('svc').expose()
+            openshift.newApp("hello-openshift-image-ui:latest", "--name=hello-openshift").narrow('svc').expose()
           }
         }
       }
