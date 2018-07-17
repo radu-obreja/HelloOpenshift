@@ -176,6 +176,7 @@
 											<fileset dir="${basedir}/target/classes">
 												<include name="**/**"/>
 												<exclude name="com/mood/common/**" />
+												<exclude name="com/mood/ui/**" />
 												<exclude name="public/**" />
 												<exclude name="application.properties" />
 											</fileset>
