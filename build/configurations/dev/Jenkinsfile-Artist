@@ -48,6 +48,14 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.newApp("hello-openshift-image-artist:latest", "--name=hello-openshift-artist").narrow('svc').expose()
+          }
+        }
+      }
+    }	
+    stage('Config Image') {
+      steps {
+        script {
+          openshift.withCluster() {
 			openshift.selector('dc', 'hello-openshift-artist').env("--from=configmap/hello-openshift-config")
           }
         }
