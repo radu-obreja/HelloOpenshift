@@ -33,6 +33,9 @@ pipeline {
           openshift.withCluster() {
             openshift.tag("hello-openshift-image-ui:latest", "hello-openshift-image-ui:dev")
           }
+          openshift.withCluster() {
+            openshift.selector("bc", "hello-openshift-image-ui").delete()
+          }
         }
       }
     }
