@@ -47,7 +47,7 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.newApp("hello-openshift-movie:latest", "--name=hello-openshift-movie").narrow('svc').expose()
+            openshift.newApp("hello-openshift-image-movie:latest", "--name=hello-openshift-movie").narrow('svc').expose()
           }
         }
       }
