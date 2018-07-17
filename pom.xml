@@ -163,12 +163,12 @@
 						<version>1.8</version>
 						<executions>
 							<execution>
-								<phase>process-resources</phase>
+								<phase>process-classes</phase>
 								<goals>
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<copy todir="${basedir}/target/classes" overwrite="true">
 											<fileset dir="${basedir}/build/configurations" includes="application.properties" />
 										</copy>
@@ -180,7 +180,7 @@
 												<exclude name="application.properties" />
 											</fileset>
 										</delete>
-									</tasks>
+									</target>
 								</configuration>								
 							</execution>
 						</executions>
@@ -205,12 +205,12 @@
 						<version>1.8</version>
 						<executions>
 							<execution>
-								<phase>process-resources</phase>
+								<phase>process-classes</phase>
 								<goals>
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<copy todir="${basedir}/target/classes" overwrite="true">
 											<fileset dir="${basedir}/build/configurations" includes="application.properties" />
 										</copy>
@@ -222,7 +222,7 @@
 												<exclude name="application.properties" />
 											</fileset>
 										</delete>
-									</tasks>
+									</target>
 								</configuration>								
 							</execution>
 						</executions>
@@ -247,12 +247,12 @@
 						<version>1.8</version>
 						<executions>
 							<execution>
-								<phase>process-resources</phase>
+								<phase>process-classes</phase>
 								<goals>
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<copy todir="${basedir}/target/classes" overwrite="true">
 											<fileset dir="${basedir}/build/configurations" includes="application.properties" />
 										</copy>
@@ -264,7 +264,7 @@
 												<exclude name="application.properties" />
 											</fileset>
 										</delete>
-									</tasks>
+									</target>
 								</configuration>								
 							</execution>
 						</executions>
@@ -289,16 +289,16 @@
 						<version>1.8</version>
 						<executions>
 							<execution>
-								<phase>process-resources</phase>
+								<phase>process-classes</phase>
 								<goals>
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<copy todir="${basedir}/target/classes" overwrite="true">
 											<fileset dir="${basedir}/build/configurations" includes="application.properties" />
 										</copy>
-									</tasks>
+									</target>
 								</configuration>								
 							</execution>
 						</executions>
