@@ -5,7 +5,23 @@ pipeline {
   stages {
     stage('Sonar') {
       steps {
-		sh "mvn clean test sonar:sonar -e -P openshift-sonar"
+		sh "mvn clean test sonar:sonar package -e -P openshift-sonar"
+      }
+    }
+    stage('Create Image Builder') {
+      when {
+        expression {
+          openshift.withCluster() {
+            return !openshift.selector("bc", "hello-openshift-image-sonar").exists();
+          }
+        }
+      }
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.newBuild("--name=hello-openshift-image-sonar", "https://github.com/radu-obreja/HelloOpenshift.git")
+          }
+        }
       }
     }
   }
